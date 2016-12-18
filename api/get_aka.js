@@ -29,7 +29,6 @@ function get_aka(req, res){
                 console.log('AKA: ', results[0]);
                 result = results[0];
             });
-            connection.end();
 
 
 }

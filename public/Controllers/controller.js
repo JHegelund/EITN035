@@ -33,13 +33,14 @@ app.controller('UserController', function($scope, $http) {
     };
 
 
-    $scope.getAka = function() {
+    $scope.addToDb = function(theUrl) {
 
-        $http.post('/api').success(function(res){
+        console.log(theUrl);
+
+        $http.post('/api', {url: theUrl}).success(function(res){
 
         });
 
-      
     };
 
     

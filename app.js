@@ -14,6 +14,7 @@ var users = require('./routes/users');
 var app = express();
 
 var dbcall = require('./api/get_aka');
+var dbpush = require('./api/push_data');
 
 
 
@@ -124,6 +125,11 @@ app.get('/searchReturn', function (req, res) {
 
 app.post('/api', function (req, res) {
 
+    console.log(req.body.url);
+    var url = req.body.url;
+    dbpush.pushData(req, url);
+
+    
     dbcall.get_aka(req, res);
 
 })
