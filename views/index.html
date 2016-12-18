@@ -29,12 +29,14 @@
             <div class="container" style="margin-top: 100px" ng-controller="UserController">
                 <!-- Start Row -->
                 <div class="row">
+                    <img src="http://swednanotech.com/wp-content/uploads/2013/07/5.015-LTH.jpg" height="140px"></img>
                     <div class="underlined-title">
-                        <h1>EIT-070 Search Engine</h1>
+                        <h1>Vulnerability Search Engine</h1>
                         <hr>
+
                     </div>
                     <div class="col-sm-8 col-sm-offset-2">
-                        <h2 class="text-center" style="color: rgb(51, 51, 51); font-variant-ligatures: normal; orphans: 2; widows: 2;">Search for vulnerability</h2>
+
                         <div class="form-group">
                             <label class="control-label" for="formInput15">Search term</label>
                             <input type="text" class="form-control" id="formInput15" placeholder="Search" name="searchword" ng-model="searchQuery">
@@ -60,7 +62,7 @@
 
                                 <input  type="checkbox" value="https://slashdot.org/" ng-model="sources['https://slashdot.org/']">    Slash Dot
 
-                            <input  type="checkbox" value="http://www.darkreading.com/" ng-model="sources['http://www.darkreading.com/']">    Dark Reading
+                                <input  type="checkbox" value="http://www.darkreading.com/" ng-model="sources['http://www.darkreading.com/']">    Dark Reading
 
                                 <input  type="checkbox" value="http://www.techrepublic.com/" ng-model="sources['http://www.techrepublic.com/']">    Tech Republic
 
@@ -73,75 +75,80 @@
 
                             <div class="row">
                                 <div class="col-sm-5 col-sm-offset-4 col-xs-12">
-                                <input type="submit" ng-click="save()" class="btn btn-block btn-primary">
+                                <input type="submit" ng-click="save()" ng-class="{'primaryButton':true}" class="btn btn-block btn-primary" id="search" name="search" value="Search">
                                  </div>
 
                             </div>
                     </div>
                 </div>
                 <!--// END Row -->
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2">
 
-
-            <ul class="media-list">
-
-                <li class="media" ng-repeat ="link in list">
-                    <a class="pull-left" href="#"> </a>
-                    <div class="media-body">
-                        <a data-toggle="modal" data-target="#{{link.$$hashKey}}"> <h4 class="media-heading">{{link.title}}</h4> </a>
-                        {{link.description}}
-                    </div>
-                    <div class="modal fade pg-show-modal" id="{{link.$$hashKey}}" tabindex="-1" role="dialog" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                    <h4 class="modal-title"><a href="{{link.href}}">{{link.href}}</a></h4>
-                                    <ul class="media-list">
-                                        <li class="media">
-                                            <a class="pull-left" href="#">  </a>
-                                            <div class="media-body">
-                                                <h4 class="media-heading">{{link.title}}</h4>
-                                                {{link.description}}
-                                            </div>
-                                        </li>
-
-                                        <li class="media">
-                                            <a class="pull-left" href="#">  </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="modal-body">
-                                    <p>Skriv något om innehållet&hellip;</p>
-                                    <input type="text" class="form-control" placeholder="Anteckningar">
-                                </div>
-                                <div class="modal-footer">
-                                    <div class="btn-toolbar" role="toolbar">
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-default">1</button>
-
-                                            <button type="button" class="btn btn-default">2</button>
-
-                                            <button type="button" class="btn btn-default">3</button>
-
-                                            <button type="button" class="btn btn-default">4</button>
-
-                                            <button type="button" class="btn btn-default">5</button>
-
+                             <ul class="media-list" style="margin-top: 50px">
+                                    <li class="media" ng-repeat ="link in list">
+                                        <a class="pull-left" href="#"> </a>
+                                        <div class="media-body">
+                                            <a data-toggle="modal" data-target="#{{link.$$hashKey}}"> <h4 class="media-heading">{{link.title}}</h4> </a>
+                                            <p class="help-block">{{link.href}}</p>
+                                            <p>{{link.description}}</p>
                                         </div>
+                                        <div class="modal fade pg-show-modal" id="{{link.$$hashKey}}" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
-                                        <button type="button" class="btn btn-primary">Lägg till i Databas</button>
-                                    </div>
+                                                        <ul class="media-list">
+                                                            <li class="media">
+                                                                <a class="pull-left" href="#">  </a>
+                                                                <div class="media-body">
+                                                                    <h4 class="media-heading">{{link.title}}</h4>
+                                                                    {{link.description}}
+                                                                </div>
+                                                            </li>
 
-                                </div>
-                            </div>
-                        </div>
+                                                            <a href="{{link.href}}" target="_blank">Go to page</a>
+
+                                                            <li class="media">
+                                                                <a class="pull-left" href="#">  </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>Write something about the content&hellip;</p>
+                                                        <input type="text" class="form-control" placeholder="Notes">
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <div class="btn-toolbar" role="toolbar">
+                                                            <div class="btn-group">
+                                                                <button type="button" class="btn btn-default">1</button>
+
+                                                                <button type="button" class="btn btn-default">2</button>
+
+                                                                <button type="button" class="btn btn-default">3</button>
+
+                                                                <button type="button" class="btn btn-default">4</button>
+
+                                                                <button type="button" class="btn btn-default">5</button>
+
+                                                            </div>
+
+                                                            <button type="button" ng-click="getAka()" class="btn btn-primary">Add to database</button>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </li>
+
+                             </ul>
                     </div>
-                </li>
+                </div>
 
-            </ul>
 
-            <div class="col-md-4 ">
-            </div>
             <div class="col-md-4 col-md-offset-8">
                 <ul class="pagination">
                     <li>
