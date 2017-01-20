@@ -78,26 +78,7 @@ app.post('/search', function (req, res) {
       /*console.log(link.title + ' - ' + link.href)
       console.log(link.description + "\n")*/
     }
-         /*fetchUrl("https://www.npmjs.com/package/unfluff", function(error, meta, body){
-         });
 
-         data = extractor.lazy(html, 'en');
-
-         // Access whichever data elements you need directly.
-         console.log(data);
-         console.log(data.softTitle);
-         console.log(data.date);
-         console.log(data.copyright);
-         console.log(data.author);
-         console.log(data.publisher);
-         console.log(data.text);
-         console.log(data.image);
-         console.log(data.tags);
-         console.log(data.videos);
-         console.log(data.canonicalLink);
-         console.log(data.lang);
-         console.log(data.description);
-         console.log(data.favicon);*/
          
          list = res.links;
 
