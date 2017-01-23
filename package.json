@@ -7,12 +7,14 @@
   },
   "dependencies": {
     "body-parser": "~1.15.1",
+    "cheerio": "^0.22.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.2.0",
     "express": "~4.13.4",
     "google": "2.1.0",
     "jade": "~1.11.0",
     "morgan": "~1.7.0",
+    "request": "^2.79.0",
     "serve-favicon": "~2.3.0",
     "unfluff": "^1.1.0"
   }

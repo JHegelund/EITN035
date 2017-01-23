@@ -89,7 +89,7 @@
                                     <li class="media" ng-repeat ="link in list">
                                         <a class="pull-left" href="#"> </a>
                                         <div class="media-body">
-                                            <a data-toggle="modal" data-target="#{{link.$$hashKey}}" style="cursor:pointer"> <h4 class="media-heading">{{link.title}}</h4> </a>
+                                            <a data-toggle="modal" data-target="#{{link.$$hashKey}}" ng-click="unfluff('{{link.href}}')" style="cursor:pointer"> <h4 class="media-heading">{{link.title}}</h4> </a>
                                             <p class="help-block">{{link.href}}</p>
                                             <p>{{link.description}}</p>
                                         </div>
@@ -100,11 +100,16 @@
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
                                                         <ul class="media-list">
-                                                            <li class="media">
+                                                           <li class="media" ng-repeat="name in dataContent">
                                                                 <a class="pull-left" href="#">  </a>
                                                                 <div class="media-body">
-                                                                    <h4 class="media-heading">{{link.title}}</h4>
-                                                                    {{link.description}}
+                                                                    <h4 class="media-heading" >{{ name.title }}</h4>
+                                                                    <b>Description</b><p>{{ name.description }}</p>
+                                                                    <hr>
+                                                                    <b>Content</b><p>{{ name.text }}</p>
+                                                                    <hr>
+                                                                    <b>Date:</b><h6>{{ name.date }}</h6>
+                                                                    <b>Tags:</b><p>{{ name.tags }}</p>
                                                                 </div>
                                                             </li>
 
@@ -117,24 +122,25 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <p>Write something about the content&hellip;</p>
-                                                        <input type="text" class="form-control" placeholder="Notes">
+                                                        <div class="form-group">
+                                                            <input type="text" class="form-control" placeholder="Notes" ng-model="comment[$index]">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <p>Technical rating</p>
+                                                            <select class="form-control" id="sel1" ng-model="rating[$index]">
+                                                                <option>1</option>
+                                                                <option>2</option>
+                                                                <option>3</option>
+                                                                <option>4</option>
+                                                                <option>5</option>
+                                                            </select>
+                                                        </div>
+
                                                     </div>
                                                     <div class="modal-footer">
                                                         <div class="btn-toolbar" role="toolbar">
-                                                            <div class="btn-group">
-                                                                <button type="button" class="btn btn-default">1</button>
 
-                                                                <button type="button" class="btn btn-default">2</button>
-
-                                                                <button type="button" class="btn btn-default">3</button>
-
-                                                                <button type="button" class="btn btn-default">4</button>
-
-                                                                <button type="button" class="btn btn-default">5</button>
-
-                                                            </div>
-
-                                                            <button type="button" ng-click="addToDb('{{link.href}}')" class="btn btn-primary">Add to database</button>
+                                                            <input type="button" ng-click="addToDb('{{link.href}}', $index, '{{ name.date }}')" class="btn btn-primary" value="Add to database">
                                                         </div>
 
                                                     </div>

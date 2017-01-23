@@ -6,7 +6,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var google = require('google');
 var extractor = require('unfluff');
-var fetchUrl = require("fetch").fetchUrl;
+var cheerio = require('cheerio');
+var request = require('request');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -37,7 +38,6 @@ app.use(cookieParser());
 
 var sources = [];
 var list = [];
-var data = [];
 var html;
 
 var sourceString = function(){
@@ -79,9 +79,7 @@ app.post('/search', function (req, res) {
       console.log(link.description + "\n")*/
     }
 
-         
          list = res.links;
-
 
 
          /*if (nextCounter < 4) {
@@ -89,31 +87,56 @@ app.post('/search', function (req, res) {
            if (res.next) res.next()
          }*/
   })
-
-
-
-})
-
-app.get('/searchReturn', function (req, res) {
-
-    /* var data = extractor(my_html_data, 'en'); */
-
-
-    res.json(list);
     
+    res.json(list);
+
+
 
 })
+
 
 app.post('/api', function (req, res) {
+    var dbData = [];
+    dbData.push(req.body.url);
+    dbData.push(req.body.com);
+    dbData.push(req.body.rate);
 
-    console.log(req.body.url);
-    var url = req.body.url;
-    dbpush.pushData(req, url);
-
+    /** dbData.push({
+      "url" : req.body.url,
+      "comment": req.body.com,
+      "rating" : req.body.rate
+      }); **/
     
+    dbpush.pushData(req, dbData);
+
+
     dbcall.get_aka(req, res);
 
 })
 
+app.post('/unfluff', function (req, res) {
+    var url = req.body.unfluffUrl;
+     var dataContent=[];
+    request(url, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            var $ = cheerio.load(body);
+            var html = $.html();
+            data = extractor(html, 'en');
+            var cleanText =  data.text.replace(/[\r\n]/g, '');
+            dataContent.push({
+                "title" : data.title,
+                "date": data.date,
+                "tags": data.tags,
+                "description": data.description,
+                "publisher" : data.publisher,
+                "text": cleanText
+            });
+            res.json(dataContent);
+
+        } else {
+            console.log("We’ve encountered an error: " + error);
+        }
+    });
+})
 
 module.exports = app;

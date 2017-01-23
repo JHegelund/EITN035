@@ -5,6 +5,8 @@ app.controller('UserController', function($scope, $http) {
 
     $scope.sources = {};
     $scope.urlSource = {};
+    $scope.comment = {};
+    $scope.rating = {};
 
     $scope.save = function() {
         console.log($scope.sources);
@@ -14,6 +16,9 @@ app.controller('UserController', function($scope, $http) {
 
         $http.post('/search', {sourceArray: $scope.sources, searchQuery: $scope.searchQuery}).success(function(res){
             console.log("preferences sent");
+            $scope.list = res;
+            console.log($scope.list);
+            angular.element(document.getElementById('search'))[0].disabled = false;
         });
 
         /*.error(function(data, status){
@@ -22,27 +27,22 @@ app.controller('UserController', function($scope, $http) {
          });*/
 
         
-        $http.get('/searchReturn').success(function(res){
 
-            console.log("I got the data");
-            $scope.list = res;
-            console.log($scope.list);
-            angular.element(document.getElementById('search'))[0].disabled = false;
-            
-        });
     };
 
 
-    $scope.addToDb = function(theUrl) {
-
-        console.log(theUrl);
-
-        $http.post('/api', {url: theUrl}).success(function(res){
+    $scope.addToDb = function(theUrl, index, date) {
+        $http.post('/api', {url: theUrl, com: $scope.comment[index], rate:$scope.rating[index]}).success(function(res){
 
         });
 
     };
 
-    
+    $scope.unfluff = function(uUrl) {
+            $http.post('/unfluff', {unfluffUrl: uUrl}).success(function(res){
+                $scope.dataContent = res;
+                console.log($scope.dataContent);
+            });
+        };
 
 });
