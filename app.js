@@ -79,25 +79,21 @@ app.post('/search', function (req, res) {
    var nextCounter = 0
 
     console.log(sourceString() + ' ' + searchQuery);
-     google(sourceString() + ' ' + searchQuery, function (err, res){
+     google(sourceString() + ' ' + searchQuery, function (err, response){
     if (err) console.error(err)
-       
-    for (var i = 0; i < res.links.length; ++i) {
-      var link = res.links[i];
-      /*console.log(link.title + ' - ' + link.href)
-      console.log(link.description + "\n")*/
-    }
 
-         list = res.links;
+
+         list = response.links;
 
 
          /*if (nextCounter < 4) {
            nextCounter += 1
            if (res.next) res.next()
          }*/
+         res.json(list);
   })
-    
-    res.json(list);
+
+
 
 
 
@@ -128,7 +124,7 @@ app.post('/api', function (req, res) {
 })
 
 app.post('/unfluff', function (req, res) {
-    var url = req.body.unfluffUrl;
+    var url =  req.body.unfluffUrl;
      var dataContent=[];
     request(url, function (error, response, body) {
         if (!error && response.statusCode == 200) {
@@ -144,6 +140,7 @@ app.post('/unfluff', function (req, res) {
                 "publisher" : data.publisher,
                 "text": cleanText
             });
+            console.log(dataContent + "dateTime" + date);
             res.json(dataContent);
 
         } else {
