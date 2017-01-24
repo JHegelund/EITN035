@@ -7,17 +7,25 @@ app.controller('UserController', function($scope, $http) {
     $scope.urlSource = {};
     $scope.comment = {};
     $scope.rating = {};
+    $scope.typeOf = {};
+
+    $scope.searchBtn = true;
+    $scope.oldModal = true;
 
     $scope.search = function() {
         console.log($scope.sources);
         console.log($scope.searchQuery);
 
-        angular.element(document.getElementById('search'))[0].disabled = true;
+        $scope.searchBtn = false;
+        $scope.loading = true;
 
         $http.post('/search', {sourceArray: $scope.sources, searchQuery: $scope.searchQuery}).success(function(res){
+
             $scope.list = res;
             console.log($scope.list);
-            angular.element(document.getElementById('search'))[0].disabled = false;
+
+            $scope.searchBtn = true;
+            $scope.loading = false;
         });
 
 
@@ -28,16 +36,22 @@ app.controller('UserController', function($scope, $http) {
 
     $scope.addToDb = function(theUrl, index, theDate, theTags) {
 
-        $http.post('/api', {url: theUrl, com: $scope.comment[index], rate:$scope.rating[index], date: theDate, tags: theTags}).success(function(res){
+        $http.post('/api', {url: theUrl, com: $scope.comment[index], rate:$scope.rating[index], date: theDate, tags: theTags, type: $scope.typeOf[index]}).success(function(res){
 
         });
 
     };
 
     $scope.unfluff = function(uUrl) {
-            $http.post('/unfluff', {unfluffUrl: uUrl}).success(function(res){
-                $scope.dataContent = res;
+        $scope.loadingModal = true;
+        $scope.oldModal = false;
+
+
+        $http.post('/unfluff', {unfluffUrl: uUrl}).success(function(res){
+            $scope.dataContent = res;
                 console.log($scope.dataContent);
+            $scope.loadingModal = false;
+            $scope.oldModal = true;
             });
         };
 

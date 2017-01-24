@@ -107,6 +107,7 @@ app.post('/api', function (req, res) {
     dbData.push(req.body.rate);
     dbData.push(req.body.date);
     dbData.push(req.body.tags);
+    dbData.push(req.body.type);
 
     /** dbData.push({
       "url" : req.body.url,
@@ -140,7 +141,6 @@ app.post('/unfluff', function (req, res) {
                 "publisher" : data.publisher,
                 "text": cleanText
             });
-            console.log(dataContent + "dateTime" + date);
             res.json(dataContent);
 
         } else {

@@ -17,13 +17,12 @@ function pushData(req,res){
         link = data[0];
         comment = data[1];
         rating = data[2];
-        attackType = null;
-        newsType = null;
+        newsType = data[5];
         publishedDate = data[3];
         tags = data[4];
 
-        var sql = 'insert into News values (?, ?, ?, ?, ?, ?, ?, ?)';
-        var inserts = [cveID, link, rating, comment, attackType, newsType, publishedDate, tags];
+        var sql = 'insert into News values (?, ?, ?, ?, ?, ?, ?)';
+        var inserts = [cveID, link, rating, comment, newsType, publishedDate, tags];
 
         // Preparing query
         sql = mysql.format(sql, inserts);

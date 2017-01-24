@@ -28,7 +28,7 @@
     <body data-spy="scroll" data-target="nav">
             <div class="container" style="margin-top: 100px" ng-controller="UserController">
                 <!-- Start Row -->
-                <div class="row">
+                <div class="row" id="page">
                     <img src="http://swednanotech.com/wp-content/uploads/2013/07/5.015-LTH.jpg" height="140px"></img>
                     <div class="underlined-title">
                         <h1>Vulnerability Search Engine</h1>
@@ -75,11 +75,16 @@
 
                             <div class="row">
                                 <div class="col-sm-5 col-sm-offset-4 col-xs-12">
-                                <input type="submit" ng-click="search()" ng-class="{'primaryButton':true}" class="btn btn-block btn-primary" id="search" name="search" value="Search">
-                                 </div>
+                                    <input type="submit" ng-click="search()" ng-class="{'primaryButton':true}" class="btn btn-block btn-primary" id="search" ng-show="searchBtn" name="search" value="Search">
+
+                                </div>
+                                <div class="col-sm-2 col-sm-offset-5 col-xs-12" ng-show="loading">
+                                    <div class="loader" ></div>
+                                </div>
 
                             </div>
                     </div>
+
                 </div>
                 <!--// END Row -->
                 <div class="row">
@@ -96,7 +101,12 @@
                                         <div class="modal fade pg-show-modal" id="{{link.$$hashKey}}" tabindex="-1" role="dialog" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
-                                                    <div class="modal-header">
+                                                    <div class="row"  ng-show="loadingModal">
+                                                        <div class="col-sm-2 col-sm-offset-5 col-xs-12">
+                                                            <div class="loader"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-header" ng-show="oldModal">
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
                                                         <ul class="media-list">
@@ -104,13 +114,14 @@
                                                                 <a class="pull-left" href="#">  </a>
                                                                 <div class="media-body">
                                                                     <h4 class="media-heading" >{{ name.title }}</h4>
-                                                                    <b>Description</b><p>{{ name.description }}</p>
+                                                                    <span ng-show="name.description" class="ng-hide"><b>Description</b><p>{{ name.description }}</p></span>
                                                                     <hr>
-                                                                    <b>Content</b><p>{{ name.text }}</p>
-                                                                    <hr>
-                                                                    <b>Date:</b><h6>{{ name.date }}</h6>
-                                                                    <b>Tags:</b><p>{{ name.tags }}</p>
+                                                                    <span ng-show="name.text" class="ng-hide"><b>Content</b><p>{{ name.text }}</p>
+                                                                    <hr> </span>
+                                                                    <span ng-show="name.date" class="ng-hide"><b>Date:</b><h6>{{ name.date }}</h6></span>
+                                                                    <span ng-show="name.tags" class="ng-hide"><b>Tags:</b><p>{{ name.tags }}</p></span>
                                                                 </div>
+
                                                                <div class="modal-body">
                                                                    <p>Write something about the content&hellip;</p>
                                                                    <div class="form-group">
@@ -119,11 +130,21 @@
                                                                    <div class="form-group">
                                                                        <p>Technical rating</p>
                                                                        <select class="form-control" id="sel1" ng-model="rating[$index]">
-                                                                           <option>1</option>
+                                                                           <option selected>1</option>
                                                                            <option>2</option>
                                                                            <option>3</option>
                                                                            <option>4</option>
                                                                            <option>5</option>
+                                                                       </select>
+                                                                   </div>
+                                                                   <div class="form-group">
+                                                                       <p>Type of text</p>
+                                                                       <select class="form-control" id="sel2" ng-model="typeOf[$index]">
+                                                                           <option selected>News Article</option>
+                                                                           <option>Scientific Article</option>
+                                                                           <option>Blog Post</option>
+                                                                           <option>Tweet</option>
+                                                                           <option>Standard</option>
                                                                        </select>
                                                                    </div>
 
