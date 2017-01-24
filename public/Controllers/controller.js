@@ -31,8 +31,9 @@ app.controller('UserController', function($scope, $http) {
     };
 
 
-    $scope.addToDb = function(theUrl, index, date) {
-        $http.post('/api', {url: theUrl, com: $scope.comment[index], rate:$scope.rating[index]}).success(function(res){
+    $scope.addToDb = function(theUrl, index, theDate, theTags) {
+        
+        $http.post('/api', {url: theUrl, com: $scope.comment[index], rate:$scope.rating[index], date: theDate, tags: theTags}).success(function(res){
 
         });
 

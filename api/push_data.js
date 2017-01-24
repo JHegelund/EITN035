@@ -19,8 +19,8 @@ function pushData(req,res){
         rating = data[2];
         attackType = null;
         newsType = null;
-        publishedDate = null;
-        tags = null;
+        publishedDate = data[3];
+        tags = data[4];
 
         var sql = 'insert into News values (?, ?, ?, ?, ?, ?, ?, ?)';
         var inserts = [cveID, link, rating, comment, attackType, newsType, publishedDate, tags];

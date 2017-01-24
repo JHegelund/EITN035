@@ -19,12 +19,7 @@ var dbpush = require('./api/push_data');
 
 
 
-
-
-
-// view engine setup
-//  app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'jade');
+/** Engine Setup **/
 
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
@@ -36,9 +31,17 @@ app.use(bodyParser.json());
 app.use(cookieParser());
  app.use(express.static(path.join(__dirname, 'public')));
 
+
+/** Public Variables **/
+
 var sources = [];
 var list = [];
 var html;
+
+
+
+/** Sorting Methods **/
+
 
 var sourceString = function(){
   var string = 'site: ';
@@ -59,6 +62,12 @@ function getTrueKeys(obj) {
     }
     return ret;
 }
+
+
+
+
+/* HTTP requests */
+
 
 app.post('/search', function (req, res) {
 
@@ -100,11 +109,15 @@ app.post('/api', function (req, res) {
     dbData.push(req.body.url);
     dbData.push(req.body.com);
     dbData.push(req.body.rate);
+    dbData.push(req.body.date);
+    dbData.push(req.body.tags);
 
     /** dbData.push({
       "url" : req.body.url,
       "comment": req.body.com,
-      "rating" : req.body.rate
+      "rating" : req.body.rate,
+      "date" : req.body.date,
+      "tags" : req.body.tags
       }); **/
     
     dbpush.pushData(req, dbData);
