@@ -16,6 +16,8 @@
     "morgan": "~1.7.0",
     "request": "^2.79.0",
     "serve-favicon": "~2.3.0",
-    "unfluff": "^1.1.0"
+    "twitter": "^1.7.0",
+    "unfluff": "^1.1.0",
+    "util": "^0.10.3"
   }
 }

@@ -1826,7 +1826,7 @@ fieldset[disabled] .form-control
 .nav-tabs > li.active > a:focus
 {
     background-color: transparent;
-    border-bottom: 4px solid #85d6de !important;
+    border-bottom: 4px solid #1abc9c !important;
 }
 
 .nav > li > a:hover,
@@ -1844,7 +1844,7 @@ fieldset[disabled] .form-control
 
 .tab-pane
 {
-    padding: 50px 0;
+    padding: 0px 0;
     border-bottom: 1px solid #ecf0f1;
 }
 

@@ -39,16 +39,18 @@
 
                         <div class="form-group">
                             <label class="control-label" for="formInput15">Search term</label>
-                            <input type="text" class="form-control" id="formInput15" placeholder="Search" name="searchword" ng-model="searchQuery">
-                        </div>
+                                        <input type="text" class="form-control" id="formInput15" placeholder="Search" name="searchword" ng-model="searchQuery">
+                            </div>
+
+                        <!-- Source List -->
+
                         <label class="control-label" for="formInput15">Source</label>
+
                             <p class="help-block">CVE Databases</p>
 
                                 <input  type="checkbox"  value="https://cve.mitre.org/" ng-model="sources['https://cve.mitre.org/']">   Cve Mitre
 
                                 <input  type="checkbox" value="https://nvd.nist.gov/" ng-model="sources['https://nvd.nist.gov/']">   Nvd
-
-                                <input  type="checkbox" value="https://www.exploit-db.com/"  ng-model="sources['https://www.exploit-db.com/']">  Exploit Db
 
 
                             <p class="help-block">Newspapers</p>
@@ -73,6 +75,7 @@
                                 <input  type="checkbox" value="https://reddit.com/" ng-model="sources['https://reddit.com/']">   Reddit
 
 
+
                             <div class="row">
                                 <div class="col-sm-5 col-sm-offset-4 col-xs-12">
                                     <input type="submit" ng-click="search()" ng-class="{'primaryButton':true}" class="btn btn-block btn-primary" id="search" ng-show="searchBtn" name="search" value="Search">
@@ -86,9 +89,24 @@
                     </div>
 
                 </div>
-                <!--// END Row -->
+                <!--// END Search Input -->
+
                 <div class="row">
-                    <div class="col-sm-8 col-sm-offset-2">
+                    <div class="col-sm-8 col-sm-offset-2" ng-show="searchCol">
+                        <ul class="nav nav-tabs" data-pg-collapsed>
+                            <li>
+                                <a href="#tab1" data-toggle="tab">Google</a>
+                            </li>
+                            <li>
+                                <a href="#tab2" data-toggle="tab" ng-show="twitterCol">Twitter</a>
+                            </li>
+
+                        </ul>
+
+                        <!-- Google Search Results -->
+
+                        <div class="tab-content" data-pg-collapsed>
+                            <div class="tab-pane active" id="tab1">
 
                              <ul class="media-list" style="margin-top: 50px">
                                     <li class="media" ng-repeat ="link in list">
@@ -107,7 +125,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="modal-header" ng-show="oldModal">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="margin-top:-10px !important;">&times;</button>
 
                                                         <ul class="media-list">
                                                            <li class="media" ng-repeat="name in dataContent">
@@ -115,11 +133,20 @@
                                                                 <div class="media-body">
                                                                     <h4 class="media-heading" >{{ name.title }}</h4>
                                                                     <span ng-show="name.description" class="ng-hide"><b>Description</b><p>{{ name.description }}</p></span>
+                                                                    <span ng-show="name.Summary" class="ng-hide"><b>Summary</b><p>{{ name.Summary }}</p></span>
+                                                                    <a href="{{link.href}}" target="_blank" style="float: left;">Go to page</a>
+                                                                    <br>
                                                                     <hr>
                                                                     <span ng-show="name.text" class="ng-hide"><b>Content</b><p>{{ name.text }}</p>
                                                                     <hr> </span>
+                                                                    <span ng-show="name.Overview" class="ng-hide"><b>Overview</b><p>{{ name.Overview }}</p>
+                                                                        <hr></span>
                                                                     <span ng-show="name.date" class="ng-hide"><b>Date:</b><h6>{{ name.date }}</h6></span>
+                                                                    <span ng-show="name.cveDate" class="ng-hide"><b>CVE-Date:</b><h6>{{ name.cveDate }}</h6></span>
                                                                     <span ng-show="name.tags" class="ng-hide"><b>Tags:</b><p>{{ name.tags }}</p></span>
+                                                                    <span ng-show="name.cvss20" class="ng-hide"><b>CVSS20:</b><h6>{{ name.cvss20 }}</h6></span>
+                                                                    <span ng-show="name.cvss30" class="ng-hide"><b>CVSS30:</b><h6>{{ name.cvss30 }}</h6></span>
+
                                                                 </div>
 
                                                                <div class="modal-body">
@@ -150,8 +177,10 @@
 
                                                                </div>
                                                                <div class="modal-footer">
+                                                                   <div class="alert alert-success" ng-show="addedToDb" style="text-align:left">
+                                                                       <strong>Added!</strong> Successfully added to database.
+                                                                   </div>
                                                                    <div class="btn-toolbar" role="toolbar">
-                                                                       <a href="{{link.href}}" target="_blank" style="float: left;">Go to page</a>
                                                                        <input type="button" ng-click="addToDb('{{link.href}}', $index, '{{ name.date }}', '{{ name.tags }}')" class="btn btn-primary" value="Add to database">
                                                                    </div>
 
@@ -172,35 +201,110 @@
                                         <hr>
                                     </li>
 
-                             </ul>
+                                </ul>
+                            </div>
+
+                            <!-- Twitter Search Results -->
+
+                            <div class="tab-pane" id="tab2">
+                                <ul class="media-list" style="margin-top: 50px">
+                                    <li class="media" ng-repeat ="tweet in twitterList">
+                                        <a class="pull-left" href="#"></a>
+                                        <div class="media-body">
+                                            <a data-toggle="modal" data-target="#{{tweet.id}}" style="cursor:pointer"> <h4 class="media-heading">{{tweet.text}}</h4> </a>
+                                            <p class="help-block"><a href="https://twitter.com/a/status/{{tweet.id_str}}" target="_blank">https://twitter.com/a/status/{{tweet.id_str}}</a></p>
+                                            <p>{{tweet.created_at}}</p>
+                                        </div>
+                                        <div class="modal fade pg-show-modal" id="{{tweet.id}}" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="row"  ng-show="loadingModal">
+                                                        <div class="col-sm-2 col-sm-offset-5 col-xs-12">
+                                                            <div class="loader"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-header" ng-show="oldModal">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                                                        <ul class="media-list">
+                                                            <li class="media">
+                                                                <a class="pull-left" href="#">  </a>
+                                                                <div class="media-body">
+                                                                    <h4 class="media-heading" >{{ tweet.user.name}} on Twitter</h4>
+                                                                    <b>Tweet</b><p>{{ tweet.text}}</p>
+                                                                    <a href="https://twitter.com/a/status/{{tweet.id_str}}" target="_blank" style="float: left;">Go to tweet</a>
+                                                                    <br>
+                                                                    <hr>
+                                                                    <b>Date:</b><h6>{{ tweet.created_at }}</h6>
+                                                                    <b>Hashtags:</b><p>{{ tweet.entities.hashtags }}</p>
+                                                                </div>
+
+                                                                <div class="modal-body">
+                                                                    <p>Write something about the content&hellip;</p>
+                                                                    <div class="form-group">
+                                                                        <input type="text" class="form-control" placeholder="Notes" ng-model="comment[$index]">
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <p>Technical rating</p>
+                                                                        <select class="form-control" id="sel1" ng-model="rating[$index]">
+                                                                            <option selected>1</option>
+                                                                            <option>2</option>
+                                                                            <option>3</option>
+                                                                            <option>4</option>
+                                                                            <option>5</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <p>Type of text</p>
+                                                                        <select class="form-control" id="sel2" ng-model="typeOf[$index]">
+                                                                            <option selected>News Article</option>
+                                                                            <option>Scientific Article</option>
+                                                                            <option>Blog Post</option>
+                                                                            <option>Tweet</option>
+                                                                            <option>Standard</option>
+                                                                        </select>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <div class="alert alert-success" ng-show="addedToDb" style="text-align:left">
+                                                                        <strong>Added!</strong> Successfully added to database.
+                                                                    </div>
+                                                                    <div class="btn-toolbar" role="toolbar">
+                                                                        <input type="button" ng ng-click="addToDb('https://twitter.com/a/status/{{tweet.id_str}}', $index, '{{ tweet.created_at }}', '{{ tweet.entities.hashtags }}')" class="btn btn-primary" value="Add to database">
+                                                                    </div>
+
+                                                                </div>
+                                                            </li>
+
+
+
+                                                            <li class="media">
+                                                                <a class="pull-left" href="#">  </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </li>
+
+                                </ul>
+                            </div>
+
+                            <!-- END Twitter Search Result -->
+
+                        </div>
+
                     </div>
                 </div>
-
-
-            <div class="col-md-4 col-md-offset-8">
-                <ul class="pagination">
-                    <li>
-                        <a href="#">&laquo;</a>
-                    </li>
-                    <li class="active">
-                        <a href="#">1 <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li>
-                        <a href="#">2</a>
-                    </li>
-                    <li>
-                        <a href="#">3</a>
-                    </li>
-                    <li>
-                        <a href="#">&raquo;</a>
-                    </li>
-                </ul>
-            </div>
         </div>
 
 
 
-        <div class="copyright-bar-2">
+        <div class="copyright-bar-2" style="margin-top:100px;">
             <div class="container text-center">
                 <p>© COPYRIGHT 2015 - Lunds Tekniska Högskola- ALL RIGHTS RESERVED.</p>
             </div>
