@@ -29,7 +29,7 @@
             <div class="container" style="margin-top: 100px" ng-controller="UserController">
                 <!-- Start Row -->
                 <div class="row" id="page">
-                    <img src="http://swednanotech.com/wp-content/uploads/2013/07/5.015-LTH.jpg" height="140px"></img>
+                    <img id="logo" src="http://swednanotech.com/wp-content/uploads/2013/07/5.015-LTH.jpg" height="140px"></img>
                     <div class="underlined-title">
                         <h1>Vulnerability Search Engine</h1>
                         <hr>
@@ -95,10 +95,10 @@
                     <div class="col-sm-8 col-sm-offset-2" ng-show="searchCol">
                         <ul class="nav nav-tabs" data-pg-collapsed>
                             <li>
-                                <a href="#tab1" data-toggle="tab">Google</a>
+                                <a href="#tab1" data-toggle="tab">Google <span class="badge"> {{ list.length}}</span></a>
                             </li>
                             <li>
-                                <a href="#tab2" data-toggle="tab" ng-show="twitterCol">Twitter</a>
+                                <a href="#tab2" data-toggle="tab" ng-show="twitterCol">Twitter <span class="badge"> {{ twitterList.length}}</span></a>
                             </li>
 
                         </ul>
@@ -236,7 +236,7 @@
                                                                     <br>
                                                                     <hr>
                                                                     <b>Date:</b><h6>{{ tweet.created_at }}</h6>
-                                                                    <b>Hashtags:</b><p>{{ tweet.entities.hashtags }}</p>
+                                                                    <b ng-show="tweet.entities.hashtags" class="ng-hide">Hashtags:</b><p> <span ng-repeat="field in tweet.entities.hashtags"> {{ field.text }},<span> </p>
                                                                 </div>
 
                                                                 <div class="modal-body">

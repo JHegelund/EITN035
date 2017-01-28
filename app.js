@@ -80,7 +80,7 @@ app.post('/search', function (req, res) {
   sources= getTrueKeys(req.body.sourceArray);
   var searchQuery = req.body.searchQuery;
 
-  google.resultsPerPage = 25
+  google.resultsPerPage = 40
 
     console.log(sourceString() + ' ' + searchQuery);
      google(sourceString() + ' ' + searchQuery, function (err, response){
@@ -101,11 +101,10 @@ app.post('/searchTwitter', function (req, res) {
 
     if(sources.indexOf('https://twitter.com/') >= 0){
         
-        var params = {q: searchQuery, lang:'en', resultType: 'mixed', exclude:'retweets', count: 20};
+        var params = {q: searchQuery, lang:'en', resultType: 'mixed', exclude:'retweets', count: 40};
             client.get('search/tweets', params, function(error, data, response) {
                 if (!error) {
                     var tweets = data.statuses;
-                    console.log(tweets[0].id_string);
                     res.json(tweets);
                 }
         
