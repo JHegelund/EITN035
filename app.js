@@ -22,7 +22,6 @@ var users = require('./routes/users');
 
 var app = express();
 
-var dbcall = require('./api/get_aka');
 var dbpush = require('./api/push_data');
 
 
@@ -46,7 +45,15 @@ var list = [];
 var result = [];
 var html;
 
-
+//Creating mysql connection variable
+var mysql      = require('mysql');
+var connection = mysql.createConnection({
+      host     : '127.0.0.1',
+      port     : '8889',
+      user     : 'root',
+      password : 'root',
+      database : 'eitn35'
+  });
 
 /** Sorting Methods **/
 
@@ -77,20 +84,249 @@ function getTrueKeys(obj) {
 
 app.post('/search', function (req, res) {
     
-  sources= getTrueKeys(req.body.sourceArray);
+  sources = getTrueKeys(req.body.sourceArray);
   var searchQuery = req.body.searchQuery;
 
   google.resultsPerPage = 40
 
-    console.log(sourceString() + ' ' + searchQuery);
-     google(sourceString() + ' ' + searchQuery, function (err, response){
-    if (err) console.error(err)
+  // Check if search is for CVE or AKA
+  var stringCompare = searchQuery.substring(0, 3);
+  stringCompare = stringCompare.toLowerCase();
 
-         list = response.links;
-         res.json(list);
-  })
+  if(stringCompare == 'cve'){
 
+    // Get AKA to given CVE, if exist in database
+    var cveID = searchQuery.toLowerCase();
 
+    var sql = 'select AKA from ?? where ?? = ?';
+    var inserts = ['CVE', 'cveID', cveID];
+
+    // Preparing query
+    sql = mysql.format(sql, inserts);
+
+    connection.query(sql, function(err, results) {
+      if (err) {
+          console.error('error connecting: ' + err.stack);
+           return;
+      }
+
+      var akaResult = results.length;
+
+      // If no result from database, search without AKA
+      if(akaResult == 0){
+        // Google search for sourceStrings + CVE
+        google(sourceString() + ' ' + searchQuery, function (err, result){
+          // Get all articles from database
+            var sql = 'select article from ??';
+            var inserts = ['News'];
+
+            // Preparing query
+            sql = mysql.format(sql, inserts);
+
+            connection.query(sql, function(err, results) {
+                if (err) {
+                    console.error('error connecting: ' + err.stack);
+                   return;
+                }
+
+                list = [];
+                dbArticles = [];
+                var list2 = result.links;
+                var a = list2.length;
+                var j = results.length;
+
+                // If no articles in database, show all results
+                if(j == 0){
+                  list = result.links;
+
+                  // Else check if any article in database matches search result
+                } else {
+
+                  for(var k = 0; k < j; k++){
+                    dbArticles.push(results[k].article);
+                  }
+
+                  // Push articles from searchResult if not exist in database already
+                  for(var i = 0; i < a; i++){
+                    if(dbArticles.indexOf(list2[i].link) < 0){
+                      list.push(list2[i]);
+                    }
+                  }
+                }
+                res.json(list);
+            });
+        })
+
+        // If AKA result from database, search with AKA
+      } else {
+
+        var AKA = results[0].AKA;
+      
+        // Google search for sourceStrings + AKA + CVE
+        google(sourceString() + ' ' + AKA + ' ' + searchQuery, function (err, result){
+          if (err) console.error(err)
+
+            // Get all articles from database
+            var sql = 'select article from ??';
+            var inserts = ['News'];
+
+            // Preparing query
+            sql = mysql.format(sql, inserts);
+
+            connection.query(sql, function(err, results) {
+                if (err) {
+                    console.error('error connecting: ' + err.stack);
+                   return;
+                }
+
+                list = [];
+                dbArticles = [];
+                var list2 = result.links;
+                var a = list2.length;
+                var j = results.length;
+
+                // If no articles in database, show all results
+                if(j == 0){
+                  list = result.links;
+
+                  // Else check if any article in database matches search result
+                } else {
+
+                  for(var k = 0; k < j; k++){
+                    dbArticles.push(results[k].article);
+                  }
+
+                  // Push articles from searchResult if not exist in database already
+                  for(var i = 0; i < a; i++){
+                    if(dbArticles.indexOf(list2[i].link) < 0){
+                      list.push(list2[i]);
+                    }
+                  }
+                }
+                res.json(list);    
+            });
+        })
+      }
+    });
+
+    // If search not for CVE, search for AKA
+  } else {
+
+    var str = searchQuery;
+    var AKA = str.toLowerCase();
+
+    // Get CVE to given AKA, if exist in database
+    var sql = 'select cveID from ?? where ?? = ?';
+    var inserts = ['CVE', 'AKA', AKA];
+
+    // Preparing query
+    sql = mysql.format(sql, inserts);
+
+    connection.query(sql, function(err, results) {
+      if (err) {
+        console.error('error connecting: ' + err.stack);
+        return;
+      }
+
+      var cveResult = results.length;
+
+      // If no result from database, search without CVE
+      if(cveResult == 0){
+        // Google search for sourceStrings + AKA
+        google(sourceString() + ' ' + searchQuery, function (err, result){
+          // Get all articles from database
+            var sql = 'select article from ??';
+            var inserts = ['News'];
+
+            // Preparing query
+            sql = mysql.format(sql, inserts);
+
+            connection.query(sql, function(err, results) {
+                if (err) {
+                    console.error('error connecting: ' + err.stack);
+                   return;
+                }
+
+                list = [];
+                dbArticles = [];
+                var list2 = result.links;
+                var a = list2.length;
+                var j = results.length;
+
+                // If no articles in database, show all results
+                if(j == 0){
+                  list = result.links;
+
+                  // Else check if any article in database matches search result
+                } else {
+
+                  for(var k = 0; k < j; k++){
+                    dbArticles.push(results[k].article);
+                  }
+
+                  // Push articles from searchResult if not exist in database already
+                  for(var i = 0; i < a; i++){
+                    if(dbArticles.indexOf(list2[i].link) < 0){
+                      list.push(list2[i]);
+                    }
+                  }
+                }
+                res.json(list);
+            });
+        })
+
+        // If CVE result from database, search with CVE
+      } else {
+
+        var CVE = results[0].cveID;
+
+        // Google search for sourceStrings + AKA + CVE
+        google(sourceString() + ' ' + searchQuery + ' ' + CVE, function (err, result){
+          if (err) console.error(err)
+
+            // Get all articles from database
+            var sql = 'select article from ??';
+            var inserts = ['News'];
+
+            // Preparing query
+            sql = mysql.format(sql, inserts);
+
+            connection.query(sql, function(err, results) {
+                if (err) {
+                    console.error('error connecting: ' + err.stack);
+                    return;
+                }
+
+                list = [];
+                dbArticles = [];
+                var list2 = result.links;
+                var a = list2.length;
+                var j = results.length;
+
+                // If no articles in database, show all results
+                if(j == 0){
+                  list = result.links;
+
+                  // Else check if any article in database matches search result
+                } else {
+
+                  for(var k = 0; k < j; k++){
+                    dbArticles.push(results[k].article);
+                  }
+
+                  // Push articles from search result if not exist in database already
+                  for(var i = 0; i < a; i++){
+                    if(dbArticles.indexOf(list2[i].link) < 0){
+                      list.push(list2[i]);
+                    }
+                  }
+                }
+                res.json(list);
+            });
+        })
+      }
+    });
+  }
 })
 
 /** Search on Twitter **/
@@ -123,19 +359,8 @@ app.post('/api', function (req, res) {
     dbData.push(req.body.date);
     dbData.push(req.body.tags);
     dbData.push(req.body.type);
-
-    /** dbData.push({
-      "url" : req.body.url,
-      "comment": req.body.com,
-      "rating" : req.body.rate,
-      "date" : req.body.date,
-      "tags" : req.body.tags
-      }); **/
     
     dbpush.pushData(req, dbData);
-
-
-    dbcall.get_aka(req, res);
 
 })
 
@@ -209,7 +434,7 @@ app.post('/unfluff', function (req, res) {
 
         });
 
-    }else {
+    } else {
 
         /* Get content from site*/
 

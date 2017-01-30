@@ -14,7 +14,7 @@ function pushData(req,res){
         var data = res;
 
         cveID = 'cve-2014-1032';
-        link = data[0];
+        article = data[0];
         comment = data[1];
         rating = data[2];
         newsType = data[5];
@@ -22,7 +22,7 @@ function pushData(req,res){
         tags = data[4];
 
         var sql = 'insert into News values (?, ?, ?, ?, ?, ?, ?)';
-        var inserts = [cveID, link, rating, comment, newsType, publishedDate, tags];
+        var inserts = [cveID, article, rating, comment, newsType, publishedDate, tags];
 
         // Preparing query
         sql = mysql.format(sql, inserts);
@@ -32,8 +32,6 @@ function pushData(req,res){
                 console.error('error connecting: ' + err.stack);
                 return;
             }
-
-            console.log('AKA: ', results[0]);
         });
 }
 
