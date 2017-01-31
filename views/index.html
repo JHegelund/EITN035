@@ -94,7 +94,7 @@
                 <div class="row">
                     <div class="col-sm-8 col-sm-offset-2" ng-show="searchCol">
                         <ul class="nav nav-tabs" data-pg-collapsed>
-                            <li>
+                            <li class="active" >
                                 <a href="#tab1" data-toggle="tab">Google <span class="badge"> {{ list.length}}</span></a>
                             </li>
                             <li>
@@ -206,7 +206,7 @@
 
                             <!-- Twitter Search Results -->
 
-                            <div class="tab-pane" id="tab2">
+                            <div class="tab-pane" id="tab2" ng-show="twitterCol">
                                 <ul class="media-list" style="margin-top: 50px">
                                     <li class="media" ng-repeat ="tweet in twitterList">
                                         <a class="pull-left" href="#"></a>

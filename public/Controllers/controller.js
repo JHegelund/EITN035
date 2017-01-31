@@ -49,6 +49,7 @@ app.controller('UserController', function($scope, $http, $timeout) {
                 $scope.twitterList = res;
                 $scope.twitterCol = true;
                 console.log($scope.twitterList);
+                angular.element( document.querySelector( '#tab2' ) ).removeClass('active');
             });
         }
 
