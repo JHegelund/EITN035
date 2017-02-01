@@ -66,6 +66,6 @@ Free for all.
 
 ## Acknowledgments
 
-* Extra acknowledgments to unfluff for creating a smooth engine.
-* Google for providing an API.
-* Twitter for providing an API.
+* Unfluff package.
+* Google API.
+* Twitter  API.
