@@ -39,6 +39,7 @@ However, this project uses Unfluff as a package, hence the problems for Unfluff 
 
 **If** you want to add your own API and not sure how to do, don't hesitate to contact us at har12gry@student.lu.se, guidance will be provided.
 
+To optimize the search, you have to manually add CVE with its AKA in the CVE table in the database.
 
 ## Deployment
 
