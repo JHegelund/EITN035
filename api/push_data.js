@@ -13,16 +13,16 @@ var connection = mysql.createConnection({
 function pushData(req,res){
         var data = res;
 
-        cveID = 'cve-2014-1032';
-        article = data[0];
-        comment = data[1];
-        rating = data[2];
-        newsType = data[5];
-        publishedDate = data[3];
-        tags = data[4];
+        cveID = data[0];
+        article = data[1];
+        comment = data[2];
+        rating = data[3];
+        newsType = data[6];
+        publishedDate = data[4];
+        tags = data[5];
 
         var sql = 'insert into News values (?, ?, ?, ?, ?, ?, ?)';
-        var inserts = [cveID, article, rating, comment, newsType, publishedDate, tags];
+        var inserts = [article, cveID, rating, comment, newsType, publishedDate, tags];
 
         // Preparing query
         sql = mysql.format(sql, inserts);

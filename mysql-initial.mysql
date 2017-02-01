@@ -1,0 +1,20 @@
+CREATE TABLE `News` (
+  `article` varchar(100) NOT NULL,
+  `cveID` varchar(50) DEFAULT '',
+  `rating` varchar(2) DEFAULT NULL,
+  `comment` varchar(100) DEFAULT NULL,
+  `newsType` varchar(20) DEFAULT NULL,
+  `publishedDate` varchar(50) DEFAULT NULL,
+  `tags` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`article`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+CREATE TABLE `CVE` (
+  `cveID` varchar(20) NOT NULL DEFAULT '',
+  `AKA` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`cveID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+

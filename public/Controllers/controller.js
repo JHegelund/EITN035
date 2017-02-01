@@ -1,6 +1,7 @@
 var app = angular.module('myApp', []);
 
 
+
 app.controller('UserController', function($scope, $http, $timeout) {
 
     $scope.sources = {};
@@ -8,6 +9,8 @@ app.controller('UserController', function($scope, $http, $timeout) {
     $scope.comment = {};
     $scope.rating = {};
     $scope.typeOf = {};
+    $scope.mapped = {};
+
 
     var sourceList =[];
 
@@ -16,6 +19,7 @@ app.controller('UserController', function($scope, $http, $timeout) {
 
 
 
+    //* Search function *//
 
     $scope.search = function() {
 
@@ -53,13 +57,23 @@ app.controller('UserController', function($scope, $http, $timeout) {
             });
         }
 
+        //* Get CVE in Db *//
+
+        $http.post('/getCves').success(function(res){
+            $scope.cveList = res;
+            console.log($scope.cveList);
+        });
+
 
     }
 
     //* Add to database call *//
 
-    $scope.addToDb = function(theUrl, index, theDate, theTags) {
-        $http.post('/api', {url: theUrl, com: $scope.comment[index], rate:$scope.rating[index], date: theDate, tags: theTags, type: $scope.typeOf[index]}).success(function(res){
+    $scope.addToDb = function(theCve, theUrl, index, theDate, theTags) {
+        if (theCve) {
+            $scope.mapped[0] = theCve;
+        }
+        $http.post('/api', {cve: $scope.mapped[0], url: theUrl, com: $scope.comment[index], rate:$scope.rating[index], date: theDate, tags: theTags, type: $scope.typeOf[index]}).success(function(res){
         });
         $scope.addedToDb = true;
         $timeout(function () { $scope.addedToDb = false; }, 4000);
@@ -75,10 +89,12 @@ app.controller('UserController', function($scope, $http, $timeout) {
 
         $http.post('/unfluff', {unfluffUrl: uUrl}).success(function(res){
             $scope.dataContent = res;
-                console.log($scope.dataContent);
+            console.log($scope.dataContent);
             $scope.loadingModal = false;
             $scope.oldModal = true;
             });
+        
+
         };
 
 });

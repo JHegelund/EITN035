@@ -48,8 +48,6 @@
 
                             <p class="help-block">CVE Databases</p>
 
-                                <input  type="checkbox"  value="https://cve.mitre.org/" ng-model="sources['https://cve.mitre.org/']">   Cve Mitre
-
                                 <input  type="checkbox" value="https://nvd.nist.gov/" ng-model="sources['https://nvd.nist.gov/']">   Nvd
 
 
@@ -134,6 +132,7 @@
                                                                     <h4 class="media-heading" >{{ name.title }}</h4>
                                                                     <span ng-show="name.description" class="ng-hide"><b>Description</b><p>{{ name.description }}</p></span>
                                                                     <span ng-show="name.Summary" class="ng-hide"><b>Summary</b><p>{{ name.Summary }}</p></span>
+                                                                    <span ng-model="name.cveID" class="ng-hide"><h6>{{ name.cveID }}</h6></span>
                                                                     <a href="{{link.href}}" target="_blank" style="float: left;">Go to page</a>
                                                                     <br>
                                                                     <hr>
@@ -142,10 +141,10 @@
                                                                     <span ng-show="name.Overview" class="ng-hide"><b>Overview</b><p>{{ name.Overview }}</p>
                                                                         <hr></span>
                                                                     <span ng-show="name.date" class="ng-hide"><b>Date:</b><h6>{{ name.date }}</h6></span>
-                                                                    <span ng-show="name.cveDate" class="ng-hide"><b>CVE-Date:</b><h6>{{ name.cveDate }}</h6></span>
                                                                     <span ng-show="name.tags" class="ng-hide"><b>Tags:</b><p>{{ name.tags }}</p></span>
                                                                     <span ng-show="name.cvss20" class="ng-hide"><b>CVSS20:</b><h6>{{ name.cvss20 }}</h6></span>
                                                                     <span ng-show="name.cvss30" class="ng-hide"><b>CVSS30:</b><h6>{{ name.cvss30 }}</h6></span>
+
 
                                                                 </div>
 
@@ -169,9 +168,16 @@
                                                                        <select class="form-control" id="sel2" ng-model="typeOf[$index]">
                                                                            <option selected>News Article</option>
                                                                            <option>Scientific Article</option>
+                                                                           <option>CVE Article</option>
                                                                            <option>Blog Post</option>
                                                                            <option>Tweet</option>
                                                                            <option>Standard</option>
+                                                                       </select>
+                                                                   </div>
+                                                                   <div class="form-group" ng-hide="name.cveID" >
+                                                                       <p>Matching CVE</p>
+                                                                       <select class="form-control" id="sel3" ng-model="mapped[0]">
+                                                                           <option ng-repeat="cveNbr in cveList">{{ cveNbr.cveID }}</option>
                                                                        </select>
                                                                    </div>
 
@@ -181,7 +187,9 @@
                                                                        <strong>Added!</strong> Successfully added to database.
                                                                    </div>
                                                                    <div class="btn-toolbar" role="toolbar">
-                                                                       <input type="button" ng-click="addToDb('{{link.href}}', $index, '{{ name.date }}', '{{ name.tags }}')" class="btn btn-primary" value="Add to database">
+
+                                                                       <input type="button" ng-click="addToDb('{{ name.cveID }}', '{{link.href}}', $index, '{{ name.date }}', '{{ name.tags }}')" class="btn btn-primary" value="Add to database">
+
                                                                    </div>
 
                                                                </div>
@@ -265,13 +273,20 @@
                                                                         </select>
                                                                     </div>
 
+                                                                    <div class="form-group">
+                                                                        <p>Matching CVE</p>
+                                                                        <select class="form-control" id="sel3" ng-model="mapped[0]" >
+                                                                            <option ng-repeat="cveNbr in cveList">{{ cveNbr.cveID }}</option>
+                                                                        </select>
+                                                                    </div>
+
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <div class="alert alert-success" ng-show="addedToDb" style="text-align:left">
                                                                         <strong>Added!</strong> Successfully added to database.
                                                                     </div>
                                                                     <div class="btn-toolbar" role="toolbar">
-                                                                        <input type="button" ng ng-click="addToDb('https://twitter.com/a/status/{{tweet.id_str}}', $index, '{{ tweet.created_at }}', '{{ tweet.entities.hashtags }}')" class="btn btn-primary" value="Add to database">
+                                                                        <input type="button" ng ng-click="addToDb('', 'https://twitter.com/a/status/{{tweet.id_str}}', $index, '{{ tweet.created_at }}', '{{ tweet.entities.hashtags }}')" class="btn btn-primary" value="Add to database">
                                                                     </div>
 
                                                                 </div>

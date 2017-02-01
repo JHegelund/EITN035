@@ -353,13 +353,15 @@ app.post('/searchTwitter', function (req, res) {
 
 app.post('/api', function (req, res) {
     var dbData = [];
+    dbData.push(req.body.cve);
     dbData.push(req.body.url);
     dbData.push(req.body.com);
     dbData.push(req.body.rate);
     dbData.push(req.body.date);
     dbData.push(req.body.tags);
     dbData.push(req.body.type);
-    
+
+    console.log(dbData);
     dbpush.pushData(req, dbData);
 
 })
@@ -382,6 +384,11 @@ app.post('/unfluff', function (req, res) {
                 /*Get CVE title */
 
                 var title = $('div.vuln-detail').find('h3').text();
+
+                /*Get CVE ID */
+
+                var cve = title.substring(26, 40);
+                console.log(cve);
 
                 /*Get CVE summary*/
 
@@ -420,10 +427,11 @@ app.post('/unfluff', function (req, res) {
                 }
                 dataContent.push({
                     "title"         :   title,
+                    "cveID"         :   cve,
                     "URL"           :   url,
                     "Summary"       :   summary,
                     "Overview"      :   overview,
-                    "cveDate"       :   cveDate,
+                    "date"          :   cveDate,
                     "cvss20"        :   cvss20,
                     "cvss30"        :   cvss30
                 });
@@ -460,6 +468,22 @@ app.post('/unfluff', function (req, res) {
         });
     }
 
+})
+
+app.post('/getCves', function (req, res) {
+    var sql = 'select distinct cveID from ?? order by cveID';
+    var inserts = ['CVE'];
+
+    // Preparing query
+    sql = mysql.format(sql, inserts);
+
+    connection.query(sql, function(err, results) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+        res.json(results);
+    });
 })
 
 module.exports = app;
