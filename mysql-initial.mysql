@@ -14,7 +14,7 @@ CREATE TABLE `News` (
 CREATE TABLE `CVE` (
   `cveID` varchar(20) NOT NULL DEFAULT '',
   `AKA` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`cveID`)
+  PRIMARY KEY (`cveID`, `AKA`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
