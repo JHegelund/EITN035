@@ -204,8 +204,12 @@
                                                                    <div class="form-group" ng-hide="name.cveID" >
                                                                        <p>Matching CVE</p>
                                                                        <select class="form-control" id="sel3" ng-model="mapped[0]">
-                                                                           <option ng-repeat="cveNbr in cveList">{{ cveNbr.cveID }}</option>
+                                                                           <option ng-repeat="cveNbr in cveList">{{ cveNbr }}</option>
                                                                        </select>
+                                                                   </div>
+                                                                   <p>Add matching CVE manually&hellip;</p>
+                                                                   <div class="form-group">
+                                                                       <input type="text" class="form-control" placeholder="Notes" ng-model="mapped[1]">
                                                                    </div>
 
                                                                </div>

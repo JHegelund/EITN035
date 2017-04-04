@@ -471,7 +471,7 @@ app.post('/unfluff', function (req, res) {
 })
 
 app.post('/getCves', function (req, res) {
-    var sql = 'select distinct cveID from ?? order by cveID';
+    var sql = 'select cveID, AKA from ?? order by cveID';
     var inserts = ['CVE'];
 
     // Preparing query
@@ -482,7 +482,15 @@ app.post('/getCves', function (req, res) {
             console.error('error connecting: ' + err.stack);
             return;
         }
-        res.json(results);
+
+        var cveIDAndAKA = [];
+        var g = results.length;
+
+        for(var x = 0; x < g; x++){
+          cveIDAndAKA.push(results[x].cveID + ' (' + results[x].AKA + ')');
+        }
+        
+        res.json(cveIDAndAKA);
     });
 })
 

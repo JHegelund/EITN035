@@ -61,7 +61,7 @@ app.controller('UserController', function($scope, $http, $timeout) {
 
         $http.post('/getCves').success(function(res){
             $scope.cveList = res;
-            console.log($scope.cveList);
+            console.log('cveID' + $scope.cveList);
         });
 
 
@@ -70,6 +70,9 @@ app.controller('UserController', function($scope, $http, $timeout) {
     //* Add to database call *//
 
     $scope.addToDb = function(theCve, theUrl, index, theDate, theTags) {
+        if($scope.mapped[1]){
+            $scope.mapped[0] = $scope.mapped[1];
+        }
         if (theCve) {
             $scope.mapped[0] = theCve;
         }
